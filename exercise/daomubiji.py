@@ -23,6 +23,7 @@ def get_toc(html):
     toc_url_list = []
     toc_block = re.findall('<h2>盗墓笔记(.*?)</div>',html,re.S)[0]
     toc_url = re.findall('href="(.*?)"', toc_block, re.S)
+
     for url in toc_url:
         toc_url_list.append(url)
     return toc_url_list
@@ -34,7 +35,7 @@ def get_article(html):
     :return: 章节名，正文
     """
     chapter_name = re.search('<h1>(.*?)<', html, re.S).group(1)
-    text_block = re.search('<p>(.*?)</p>', html, re.S).group(1)
+    text_block = re.search('<p>(.*?)<p class="weixin">', html, re.S).group(1)
     # text_block = re.search('<div class="content">(.*?)</a></div>', html, re.S)
     return chapter_name, text_block
 
