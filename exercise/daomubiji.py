@@ -34,7 +34,7 @@ def get_article(html):
     :return: 章节名，正文
     """
     chapter_name = re.search('<h1>(.*?)<', html, re.S).group(1)
-    text_block = re.search('<p>(.*?)</p>', html, re.S).group(2)
+    text_block = re.search('<p>(.*?)</p>', html, re.S).group(1)
     # text_block = re.search('<div class="content">(.*?)</a></div>', html, re.S)
     return chapter_name, text_block
 
