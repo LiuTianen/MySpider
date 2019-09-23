@@ -36,6 +36,8 @@ def get_article(html):
     """
     chapter_name = re.search('<h1>(.*?)<', html, re.S).group(1)
     text_block = re.search('<p>(.*?)<p class="weixin">', html, re.S).group(1)
+    text_block = text_block.replace('<p>', '')
+    text_block = text_block.replace('</p>', '')
     # text_block = re.search('<div class="content">(.*?)</a></div>', html, re.S)
     return chapter_name, text_block
 
