@@ -5,15 +5,17 @@ from selenium import webdriver
 #动态加载的页面，需要后续补充
 driver = webdriver.PhantomJS()
 url = 'https://search.damai.cn/search.htm'
+#真的网址
+url = 'https://search.damai.cn/searchajax.html?keyword=&cty=&ctl=%E6%BC%94%E5%94%B1%E4%BC%9A&sctl=&tsg=0&st=&et=&order=1&pageSize=30&currPage=2&tn='
 driver.get(url)
 # source = requests.get(url).content
 source = driver.page_source
-selector = lxml.html.fromstring(source)
-item_list = selector.xpath('/html/body/div[2]/div[2]/div[1]/div[3]/div[1]/div/div')
+# selector = lxml.html.fromstring(source)
+item_list = source.xpath('div[@class="search__itemlist"]')
 
 item_dict_list = []
 for item in item_list:
-    show_name = item.xpath('div[@class="items__txt__title"]/a/text()')
+    show_name = item.xpath('div[@class="items"]div[@class="items__txt__title"]/a/text()')
     show_url = item.xpath('div[@class="items__txt__title"]/a/@href')
     show_description = item.xpath('div[@class="items__txt__title"]/div[@class="items__txt__time"]/text()')
     show_time = item.xpath('div[@class="items__txt__time"]/a[@class="items__txt__time__icon"]/text()')
