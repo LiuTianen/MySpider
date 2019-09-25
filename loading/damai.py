@@ -1,21 +1,24 @@
 import requests
 import lxml.html
 import csv
-
-url = 'https://www.damai.cn/projectlist.do'
-source = requests.get(url).content
-
+from selenium import webdriver
+#动态加载的页面，需要后续补充
+driver = webdriver.PhantomJS()
+url = 'https://search.damai.cn/search.htm'
+driver.get(url)
+# source = requests.get(url).content
+source = driver.page_source
 selector = lxml.html.fromstring(source)
-item_list = selector.xpath('//ul[@id="performList"]/li')
+item_list = selector.xpath('/html/body/div[2]/div[2]/div[1]/div[3]/div[1]/div/div')
 
 item_dict_list = []
 for item in item_list:
-    show_name = item.xpath('div[@class="ri-infos"]/h2/a/text()')
-    show_url = item.xpath('div[@class="ri-infos"]/h2/a/@href')
-    show_description = item.xpath('div[@class="ri-infos"]/p[1]/text()')
-    show_time = item.xpath('div[@class="ri-infos"]/p[@class="mt5"]/text()')
-    show_place = item.xpath('div[@class="ri-infos"]/p[@class="mt5"]/span[@class="ml20"]/a/text()')
-    show_price = item.xpath('div[@class="ri-infos"]/p/span[@class="price-sort"]/text()')
+    show_name = item.xpath('div[@class="items__txt__title"]/a/text()')
+    show_url = item.xpath('div[@class="items__txt__title"]/a/@href')
+    show_description = item.xpath('div[@class="items__txt__title"]/div[@class="items__txt__time"]/text()')
+    show_time = item.xpath('div[@class="items__txt__time"]/a[@class="items__txt__time__icon"]/text()')
+    show_place = item.xpath('div[@class="items__txt__price"]/text()')
+    show_price = item.xpath('div[@class="items__txt__price"]/span/text()')
 
     item_dict = {'show_name': show_name[0] if show_name else '',
                  'show_url': 'https:' + show_url[0] if show_url else '',
