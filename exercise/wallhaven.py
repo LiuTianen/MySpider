@@ -40,24 +40,35 @@ def get_toc(html):
             img_list.append(url)
         return img_list
 def get_pic_url(pic_html):
-    soup = BeautifulSoup(pic_html, 'lxml')
-    #需要for循环查找
-    # img_url_loc = soup.find('div',{"ckass":"scrollbox"})
-    # img_name = re.search('data-wallpaper-id="(.*?)"data-wallpaper-width', img_url_loc,re.S)
-    img_url = re.findall('<img id="wallpaper" src="(.*?)" alt')
-    return img_url
+    # soup = BeautifulSoup(pic_html, 'lxml')
+    # #需要for循环查找
+    # img_url_loc = soup.find_all('section',{"id":"showcase"})
+    # # img_name = re.search('data-wallpaper-id="(.*?)"data-wallpaper-width', img_url_loc,re.S)
+    # # img_url = re.findall('<img id="wallpaper" src="(.*?)"', img_url_loc,re.S)
+    # img_url = []
+    # for div in img_url_loc:
+    #     imgs = div.find_all('div',{"class":"scrollbox"})
+    #     for img in imgs:
+    #         url = img['src']
+    #         # url = re.findall('src="(.*?)"',img,re.S)[0]
+    #         img_url.append(url)
+    #     return img_url
+    img_url_loc = re.search('<div class="scrollbox"(.*?)</div>',pic_html,re.S).group(1)
+    img_url = re.search('<img id="wallpaper" src="(.*?)"',img_url_loc,re.S).group(1)
+    img_name = img_url.split('/')[-1]
+    return img_url,img_name
 
-def save(img_url):
+def save(img_url,image_name):
     r = requests.get(img_url, stream=True)
-    with open('D:\img\%s'  'wb') as f:
+    with open('D:\img\%s' %image_name, 'wb') as f:
         for chunk in r.iter_content(chunk_size=128):
             f.write(chunk)
     # print('Saved %s' % img_name)
 
 def get_pic(url):
     pic_html = get_source(url)
-    img_url = get_pic_url(pic_html)
-    save(img_url)
+    img_url,img_name = get_pic_url(pic_html)
+    save(img_url,img_name)
 
 
 
