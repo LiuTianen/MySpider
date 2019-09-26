@@ -41,6 +41,7 @@ def get_toc(html):
         return img_list
 def get_pic_url(pic_html):
     soup = BeautifulSoup(pic_html, 'lxml')
+    #需要for循环查找
     # img_url_loc = soup.find('div',{"ckass":"scrollbox"})
     # img_name = re.search('data-wallpaper-id="(.*?)"data-wallpaper-width', img_url_loc,re.S)
     img_url = re.findall('<img id="wallpaper" src="(.*?)" alt')
