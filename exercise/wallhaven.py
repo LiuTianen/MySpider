@@ -8,23 +8,10 @@ headers = {
         "Host": "wallhaven.cc",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36"
     }
+
 def get_source(url):
     html = requests.get(url,headers=headers).text
     return html
-# def get_source():
-#     # url = URL = "https://wallhaven.cc/latest"
-#     url = "https://wallhaven.cc/latest"
-#     # for i in range(6):
-#     #     if i > 1:
-#     #         URL = "https://wallhaven.cc/latest?page="+ str(i)
-#     headers = {
-#         "Host": "wallhaven.cc",
-#         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36"
-#     }
-#     respones = requests.get(url,headers=headers).text
-#     # 解析链接包含的信息
-#     soup = BeautifulSoup(respones, 'lxml')
-#     return soup
 def get_toc(html):
     # 解析链接包含的信息
     soup = BeautifulSoup(html, 'lxml')
@@ -39,20 +26,8 @@ def get_toc(html):
             url = img['href']
             img_list.append(url)
         return img_list
+
 def get_pic_url(pic_html):
-    # soup = BeautifulSoup(pic_html, 'lxml')
-    # #需要for循环查找
-    # img_url_loc = soup.find_all('section',{"id":"showcase"})
-    # # img_name = re.search('data-wallpaper-id="(.*?)"data-wallpaper-width', img_url_loc,re.S)
-    # # img_url = re.findall('<img id="wallpaper" src="(.*?)"', img_url_loc,re.S)
-    # img_url = []
-    # for div in img_url_loc:
-    #     imgs = div.find_all('div',{"class":"scrollbox"})
-    #     for img in imgs:
-    #         url = img['src']
-    #         # url = re.findall('src="(.*?)"',img,re.S)[0]
-    #         img_url.append(url)
-    #     return img_url
     img_url_loc = re.search('<div class="scrollbox"(.*?)</div>',pic_html,re.S).group(1)
     img_url = re.search('<img id="wallpaper" src="(.*?)"',img_url_loc,re.S).group(1)
     img_name = img_url.split('/')[-1]
