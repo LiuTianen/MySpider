@@ -2,17 +2,19 @@ import requests
 import lxml.html
 import csv
 from selenium import webdriver
+import re
+
 #动态加载的页面，需要后续补充
-driver = webdriver.PhantomJS()
-url = 'https://search.damai.cn/search.htm'
+# driver = webdriver.PhantomJS()
+# url = 'https://search.damai.cn/search.htm'
 #真的网址
 url = 'https://search.damai.cn/searchajax.html?keyword=&cty=&ctl=%E6%BC%94%E5%94%B1%E4%BC%9A&sctl=&tsg=0&st=&et=&order=1&pageSize=30&currPage=2&tn='
-driver.get(url)
-# source = requests.get(url).content
-source = driver.page_source
+# driver.get(url)
+source = requests.get(url).content.decode('utf-8')
+# source = driver.page_source
 # selector = lxml.html.fromstring(source)
-item_list = source.xpath('div[@class="search__itemlist"]')
-
+# item_list = source.xpath('div[@class="search__itemlist"]')
+item_list = re.search('<body>(.*?)</body>',source)
 item_dict_list = []
 for item in item_list:
     show_name = item.xpath('div[@class="items"]div[@class="items__txt__title"]/a/text()')
