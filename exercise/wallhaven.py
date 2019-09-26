@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import re
 from multiprocessing.dummy import Pool
-import os
+
 start_url = 'https://wallhaven.cc/latest'
 headers = {
         "Host": "wallhaven.cc",
