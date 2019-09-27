@@ -2,10 +2,10 @@ import requests
 import csv
 import re
 from bs4 import BeautifulSoup
+import lxml.html
 
-
+#使用BS４复杂解析
 start_url = "http://www.chapaofan.com/movies.html?page=1"
-
 respones = requests.get(start_url).text
 
 soup = BeautifulSoup(respones,'lxml')
@@ -34,3 +34,14 @@ for div in move_big_box:
         ])
         writer.writeheader()
         writer.writerows(url_list)
+
+#使用xpath的方法定位
+start_url = "http://www.chapaofan.com/16158.html"
+respones = requests.get(start_url).text
+selector = lxml.html.fromstring(respones)
+title = selector.xpath('//div[@class="details-box"]/h2/text()')
+print(title)
+link = selector.xpath('//div[@class="download-list"]/ul/li/a/@href')
+print(link)
+cccc = selector.xpath('//div[@class="introduce mt"]/text()')
+print(cccc)
