@@ -1,10 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 
-url = URL = "https://wallhaven.cc/latest"
-for i in range(6):
-    if i > 1:
-        URL = "https://wallhaven.cc/latest?page="+ str(i)
+URL = "https://wallhaven.cc/latest"
 
 #打开链接，并获取相关的信息
 html = requests.get(URL).text
@@ -27,7 +24,10 @@ for ul in img_link_ul:
             for chunk in r.iter_content(chunk_size=128):
                 f.write(chunk)
         print('Saved %s' % image_name)
-
+#随机打开一个页面进行获取
+# for i in range(6):
+#     if i > 1:
+#         URL = "https://wallhaven.cc/latest?page="+ str(i)
 
 # URL = "http://www.nationalgeographic.com.cn/animals/"
 #
