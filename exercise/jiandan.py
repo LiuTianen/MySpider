@@ -1,57 +1,30 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from lxml import etree
 import requests
+from bs4 import BeautifulSoup
 
-import time
+headers = {
+    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36'
+}
 
-browser = webdriver.PhantomJS()
-browser.set_window_size(1366, 768)  # 这个地方需要设置一下浏览器的尺寸
-wait = WebDriverWait(browser,10)
-browser.get("http://jandan.net/ooxx")
+def download_file(url):
+    print('Downding %s' %url)
+    local_filename = url.split('/')[-1]
+    r = requests.get(url, stream=True, headers=headers)
+    with open(local_filename, 'wb') as f:
+        for chunk in r.iter_content(chunk_size=1024):
+            if chunk:
+                f.write(chunk)
+                f.flush()
+    return local_filename
 
-def get_content():
+url = 'http://jandan.net/drawings'
+soup = BeautifulSoup(requests.get(url, headers=headers).text, 'html.parser')
 
-    try:
+#查找src文件名以jpg结尾的，并且src中包含sinaimg.cn的img标签
+def valid_img(src):
+    return src.endswith('jpg') and 'sinaimg.cn' in src
 
-        wait.until(
-            EC.presence_of_element_located((By.XPATH,'//*[@id="comments"]/ol'))
-        )
-        #
-        print("正在爬取{}".format(browser.current_url))
-        page_source = browser.page_source  # 获取网页源码
-        html = etree.HTML(page_source)  # 解析源码
-        imgs = html.xpath("//li[contains(@id,'comment')]//img/@src")  # 匹配图片
-        download(imgs)
-
-    except Exception as e:
-        print("错误")
-        print(e)
-    finally:
-        browser.close()
-
-def download(imgs):
-    path = "./xxoo/{}"  # 路径我写死了
-    for img in imgs:
-        try:
-            res = requests.get(img)
-            content = res.content
-        except Exception as e:
-            print(e)
-            continue
-
-        file_name = img.split("/")[-1] # 获取文件名
-
-        with open(path.format(file_name),"wb") as f:
-            f.write(content)
-            print(file_name,"成功下载文件")
-            time.sleep(0.3)
-
-    # 循环下载完毕，进行翻页操作 previous-comment-page
-    next = wait.until(
-        EC.presence_of_element_located((By.XPATH, '//*[@id="comments"]//a[@class="previous-comment-page"]'))
-    )
-    next.click()
-    return get_content()  # 继续调用上面的网页源码分析流程
+for img in soup.find_all('img', src=valid_img):
+    src = img['src']
+    if not src.startswith('http'):
+        src = 'http:' + src
+    download_file(src)
