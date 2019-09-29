@@ -33,7 +33,6 @@ class Spider():
 
 # 生产者，负责从每个页面提取图片列表链接
 class Producer(threading.Thread):
-
     def run(self):
         global all_urls
         while len(all_urls) > 0:
