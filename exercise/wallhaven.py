@@ -12,6 +12,7 @@ headers = {
 def get_source(url):
     html = requests.get(url,headers=headers).text
     return html
+
 def get_toc(html):
     # 解析链接包含的信息
     soup = BeautifulSoup(html, 'lxml')
@@ -36,7 +37,7 @@ def get_pic_url(pic_html):
 def save(img_url,image_name):
     r = requests.get(img_url, stream=True)
     with open('D:\img\%s' %image_name, 'wb') as f:
-        for chunk in r.iter_content(chunk_size=128):
+        for chunk in r.iter_content(chunk_size=1024):
             f.write(chunk)
     # print('Saved %s' % img_name)
 
@@ -44,8 +45,6 @@ def get_pic(url):
     pic_html = get_source(url)
     img_url,img_name = get_pic_url(pic_html)
     save(img_url,img_name)
-
-
 
 
 if __name__ == '__main__':
