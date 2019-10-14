@@ -4,14 +4,17 @@ import os
 from multiprocessing.dummy import Pool
 
 start_url = 'http://www.daomubiji.org/'
-
+headers = {
+    "Host": "www.daomubiji.org",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36"
+}
 def get_source(url):
     """
     获取网页源代码。
     :param url: 网址
     :return: 网页源代码
     """
-    html = requests.get(url)
+    html = requests.get(url,headers=headers)
     return html.content.decode('utf-8')
 
 def get_toc(html):
@@ -21,9 +24,9 @@ def get_toc(html):
     :return: 每章链接
     """
     toc_url_list = []
-    toc_block = re.findall('<h2>盗墓笔记(.*?)</div>',html,re.S)[0]
-    toc_url = re.findall('href="(.*?)"', toc_block, re.S)
-
+    toc_block = re.findall('<h2>盗墓笔记(.*?)</div>',html,re.S)
+    #需要转成str，否则会报类型错误的问题
+    toc_url = re.findall('href="(.*?)"', str(toc_block), re.S)
     for url in toc_url:
         toc_url_list.append(url)
     return toc_url_list
