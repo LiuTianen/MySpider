@@ -10,7 +10,8 @@ respones = requests.get(start_url).text.encode('utf-8')
 data = json.loads(respones)
 comcert = data['data']['cards']
 # print(comcert)
-url = re.findall("'scheme': \'(.*?)\'", str(comcert),re.S)
+url = re.findall("'scheme': \'(https://m.weibo.cn/status.*?)\'", str(comcert),re.S)
+# url = re.findall(r'https://m.weibo.cn/status', str(comcert), re.S)
 print(url)
 #jsonpath的用法
 # url = jsonpath.jsonpath(comcert,expr='$..avatar_hd')
