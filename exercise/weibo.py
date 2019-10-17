@@ -39,7 +39,8 @@ def main(offset):
     #摄个毛线，妹子图
     start_url = "https://m.weibo.cn/api/container/getIndex?containerid=1076032267821341&page=" + str(offset)
     #冰块，漫画
-    # start_url = 'https://m.weibo.cn/api/container/getIndex?type=uid&value=2565076590&containerid=1076032565076590&page=' + str(offset)
+    # start_url = 'https://m.weibo.cn/api/container/getIndex?containerid=1076032565076590&page=' + str(offset)
+    #old:https://m.weibo.cn/api/container/getIndex?type=uid&value=2565076590&containerid=1076032565076590
     respones = getHtml(start_url)
     url = getUrl(respones)
     pic_html = get_html(url.pop())
