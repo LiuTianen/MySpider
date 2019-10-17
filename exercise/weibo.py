@@ -36,8 +36,9 @@ def save(img_url):
 
 
 def main(offset):
-    #
+    #摄个毛线，妹子图
     start_url = "https://m.weibo.cn/api/container/getIndex?containerid=1076032267821341&page=" + str(offset)
+    #冰块，漫画
     # start_url = 'https://m.weibo.cn/api/container/getIndex?type=uid&value=2565076590&containerid=1076032565076590&page=' + str(offset)
     respones = getHtml(start_url)
     url = getUrl(respones)
