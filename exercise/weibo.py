@@ -8,6 +8,7 @@ url_list = []
 def getHtml(url):
     respones = requests.get(url).text.encode('utf-8')
     return respones
+
 def get_html(url):
     html = requests.get(url).content.decode('utf-8')
     return html
