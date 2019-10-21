@@ -92,7 +92,7 @@ def get_details(url):
 
 if __name__ == '__main__':
     # 链接数据库
-    db = pymysql.connect(host="localhost", user="root", password="******", db="movies", port=3306)
+    db = pymysql.connect(host="localhost", user="root", password="123qweaa", db="movies", port=3308)
     cur = db.cursor()
     # 通过榜单爬取前250部电影的详细地址
     movie_urls = {}
