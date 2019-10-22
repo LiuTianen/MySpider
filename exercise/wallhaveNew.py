@@ -54,6 +54,6 @@ def get_pic(url):
     save(img_url,img_name)
 
 if __name__ == '__main__':
-    for i in range(1,10):
+    for i in range(1,5):
         main(offset=i)
         time.sleep(1)
