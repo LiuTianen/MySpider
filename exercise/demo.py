@@ -10,7 +10,7 @@ def get_details(url):
     sore = html(".rating_num").text()
     # 定位到目标信息的区域，并将定位区域网页的PyQuery对象转换为字符串
     info = str(html(".subject.clearfix #info").children())
-    # 将对应区域网站信息去空额、去回车换行
+    # 将对应区域网站信息去空格、去回车换行
     info = info.replace(' ', '').replace('\n', '').replace('\r', '')
     # 用正则表达式匹配导演信息
     director = ""
