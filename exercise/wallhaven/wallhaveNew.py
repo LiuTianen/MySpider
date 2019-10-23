@@ -1,3 +1,4 @@
+#单线程高可用版本
 import requests
 import time
 from bs4 import BeautifulSoup

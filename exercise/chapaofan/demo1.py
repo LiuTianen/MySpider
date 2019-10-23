@@ -1,3 +1,4 @@
+#获取详情页面的
 from pyquery import PyQuery as pq
 import re
 
