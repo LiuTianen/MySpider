@@ -4,6 +4,7 @@ import time
 from bs4 import BeautifulSoup
 import re
 from multiprocessing.dummy import Pool
+import os
 
 
 headers = {
@@ -44,6 +45,8 @@ def get_pic_url(pic_html):
     return img_url,img_name
 
 def save(img_url,image_name):
+    os.makedirs('D:\img', exist_ok=True)
+    time.sleep(0.5)
     r = requests.get(img_url, stream=True)
     with open('D:\img\%s' %image_name, 'wb') as f:
         for chunk in r.iter_content(chunk_size=1024):
@@ -55,6 +58,6 @@ def get_pic(url):
     save(img_url,img_name)
 
 if __name__ == '__main__':
-    for i in range(1,5):
+    for i in range(1,3):
         main(offset=i)
         time.sleep(1)

@@ -3,6 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 import re
 from multiprocessing.dummy import Pool
+import os
 
 start_url = 'https://wallhaven.cc/latest'
 headers = {
@@ -36,6 +37,7 @@ def get_pic_url(pic_html):
     return img_url,img_name
 
 def save(img_url,image_name):
+    os.makedirs('D:\img', exist_ok=True)
     r = requests.get(img_url, stream=True)
     with open('D:\img\%s' %image_name, 'wb') as f:
         for chunk in r.iter_content(chunk_size=1024):
