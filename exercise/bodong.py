@@ -1,21 +1,24 @@
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.wait import WebDriverWait
 import time
 import re
 import requests
-import os
 
 
 
 browser =webdriver.Firefox()
 url = 'https://boodo.qq.com/pages/tag.html?name=COSPLAY'
+
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:71.0) Gecko/20100101 Firefox/71.0",
+    "Accept": "application/json, text/plain, */*",
+    "Accept-Language": "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
+    "Content-Type": "application/x-www-form-urlencoded",
+    # "Content-Length":str(311),
+    # "Referer": "https://boodo.qq.com/pages/tag.html?name=COSPLAY"
+}
 detail_url_list = []
 url_list = []
-# 下载图片保存路径
-DIR_PATH = r"D:\mzitu"
+
 
 def get_page_detail(url):
     try:
@@ -35,7 +38,7 @@ def get_page_detail(url):
                     browser.execute_script('window.scrollTo(0, document.body.scrollHeight)')
                     height = new_height
                     t1 = int(time.time())
-                elif num < 3:
+                elif num < 4:
                     time.sleep(3)
                     num = num + 1
                 else:
@@ -48,7 +51,7 @@ def get_page_detail(url):
     finally:
         browser.close()
 def get_deatil_url(html):
-    box = re.findall('<div class="biz-ugc" style="max-height:none;">(.*?)<div class="mask-waterfall">',html, re.S)
+    box = re.findall('<div class="biz-ugc" style="max-height:none;">(.*?)</ul><div class="mask-waterfall">',html, re.S)
     Top_url = re.findall('<a href="(.*?)" class="box">', str(box), re.S)
     for i in Top_url:
         detail_url = 'https://boodo.qq.com' + i
@@ -58,29 +61,27 @@ def get_deatil_url(html):
 def urls_crawler(url):
     for i in url:
         html = requests.get(url=i).content.decode('utf-8')
-        folder_name = re.findall('<h1 class="detail-title">(.*?)</h1>', html, re.S)
-        
         data = re.findall('<div class="layer-login hover-class">(.*?)<div class="time">', html, re.S)
         url = re.findall('<img src="(.*?)" class="imgauto">', str(data), re.S)
         url_list.append(url)
+    return url_list
 
+def save_pic(pic_src):
+    """
+    保存图片到本地
+    """
+    for i in pic_src:
+        for ii in i:
+            time.sleep(0.10)
+            img = requests.get(ii, headers=HEADERS, timeout=10)
+            img_name = ii.split('/')[-2] + '.jpg'
+            with open('D:\imgs\%s' % img_name, 'ab') as f:
+                f.write(img.content)
+                print(img_name)
 
-def make_dir(folder_name):
-    """
-    新建文件夹并切换到该目录下
-    """
-    path = os.path.join(DIR_PATH, folder_name)
-    # 如果目录已经存在就不用再次爬取了，去重，提高效率。存在返回 False，否则反之
-    if not os.path.exists(path):
-        os.makedirs(path)
-        print(path)
-        os.chdir(path)
-        return True
-    print("Folder has existed!")
-    return False
 
 if __name__ == '__main__':
     html = get_page_detail(url)
     detail_url = get_deatil_url(html)
     Pic_url = urls_crawler(detail_url)
-    print(detail_url)
+    save_pic(Pic_url)
