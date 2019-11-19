@@ -5,6 +5,7 @@ import re
 
 url_list = []
 
+# querystring = {"is_hot[]":["1","1"],"jumpfrom":"weibocom","type":"uid","value":"3175311821","containerid":"1076033175311821","page":"1"}
 def getHtml(url):
     respones = requests.get(url).text.encode('utf-8')
     return respones
@@ -31,12 +32,14 @@ def save(img_url):
         url = i
         img_name = i.split('/')[-1]
         r = requests.get(url, stream=True)
-        with open('D:\img\%s' % img_name, 'wb') as f:
+        with open('D:\Weiboimg\%s' % img_name, 'wb') as f:
             for chunk in r.iter_content(chunk_size=1024):
                 f.write(chunk)
 
 
 def main(offset):
+    #A-mu_
+    # start_url = "https://m.weibo.cn/api/container/getIndex?is_hot[]=1&is_hot[]=1&jumpfrom=weibocom&type=uid&value=3175311821&containerid=1076033175311821&page="+ str(offset)
     #摄个毛线，妹子图
     start_url = "https://m.weibo.cn/api/container/getIndex?containerid=1076032267821341&page=" + str(offset)
     #冰块，漫画
@@ -49,6 +52,6 @@ def main(offset):
     save(img_url)
 
 if __name__ == '__main__':
-    for i in range(1,10):
+    for i in range(10):
         main(offset=i)
         time.sleep(1)
